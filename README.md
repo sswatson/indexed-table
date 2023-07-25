@@ -1,6 +1,6 @@
 # indexed-table
 
-`indexed-table` is a lightweight in-memory DataFrame for JavaScript. At less than 3 KB minified, it's between 100 and 1000 times smaller than more full-featured DataFrame libraries like [Arquero](https://uwdata.github.io/arquero/), [https://sql.js.org/](sql.js), or [Danfo](https://danfo.jsdata.org/).
+`indexed-table` is a lightweight in-memory DataFrame for JavaScript. At less than 3 KB minified, it's between 100 and 1000 times smaller than more full-featured DataFrame libraries like [Arquero](https://uwdata.github.io/arquero/), [sql.js](https://sql.js.org/), or [Danfo](https://danfo.jsdata.org/).
 
 ## Installation
 
