@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "esbuild src/index.ts --bundle --minify --outfile=dist/index.js",
-    "prepublish": "npm run build && npm run type-check && npm run test",
+    "prepublish": "npm run clean && npm run build && npm run type-check && npm run test",
     "type-check": "tsc --emitDeclarationOnly",
     "test": "jest",
     "clean": "rm -rf dist"
