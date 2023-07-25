@@ -1,3 +1,3 @@
-import { Microtable } from "./Microtable";
+import { IndexedTable } from "./IndexedTable";
 
-export default Microtable;
+export default IndexedTable;

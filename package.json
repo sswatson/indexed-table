@@ -1,7 +1,7 @@
 {
-  "name": "microtable",
+  "name": "indexed-table",
   "version": "0.0.1",
-  "description": "A minimalistic tabular data structure",
+  "description": "A tabular data structure that supports indexing",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -12,11 +12,11 @@
     "clean": "rm -rf dist"
   },
   "keywords": [
-    "microtable",
-    "index",
+    "indexed",
     "table",
     "data frame",
     "relation",
+    "map",
     "typescript"
   ],
   "author": "Samuel S. Watson",

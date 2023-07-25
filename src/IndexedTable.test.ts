@@ -1,4 +1,4 @@
-import { Microtable } from "./Microtable";
+import { IndexedTable } from "./IndexedTable";
 
 type Activity = { person: string; activity: string; rating: number };
 
@@ -27,12 +27,12 @@ function randomRecords(count: number) {
   return records;
 }
 
-describe("Microtable", () => {
-  let activityRatings: Microtable<Activity>;
-  let bigActivityRatings: Microtable<Activity>;
+describe("IndexedTable", () => {
+  let activityRatings: IndexedTable<Activity>;
+  let bigActivityRatings: IndexedTable<Activity>;
 
   beforeEach(() => {
-    activityRatings = Microtable.create<Activity>([
+    activityRatings = IndexedTable.create<Activity>([
       { person: "Alice", activity: "hiking", rating: 5 },
       { person: "Alice", activity: "swimming", rating: 3 },
       { person: "Bob", activity: "hiking", rating: 2 },
@@ -41,7 +41,7 @@ describe("Microtable", () => {
       { person: "Charlie", activity: "swimming", rating: 5 },
       { person: "Charlie", activity: "running", rating: 1 },
     ]);
-    bigActivityRatings = Microtable.create(randomRecords(10 ** 4));
+    bigActivityRatings = IndexedTable.create(randomRecords(10 ** 4));
   });
 
   test("records returns all records", () => {
@@ -49,7 +49,7 @@ describe("Microtable", () => {
     expect(records.length).toEqual(7);
   });
 
-  test("where returns a new Microtable with matched records", () => {
+  test("where returns a new IndexedTable with matched records", () => {
     const table = activityRatings.where({ person: "Alice" });
     const records = table.records();
     expect(records.length).toEqual(2);
@@ -61,7 +61,7 @@ describe("Microtable", () => {
     expect(records.length).toEqual(1);
   });
 
-  test("select returns a new Microtable with only the specified fields", () => {
+  test("select returns a new IndexedTable with only the specified fields", () => {
     const table = activityRatings.select("person", "activity");
     const records = table.records();
     expect(records.length).toEqual(7);
@@ -72,7 +72,7 @@ describe("Microtable", () => {
     // Since we don't have direct access to the internal indexes,
     // we can just test that querying on the indexed field is faster.
     // This isn't an ideal test, but it's the best we can do without
-    // modifying the Microtable class.
+    // modifying the IndexedTable class.
     bigActivityRatings.insert({
       person: "Alice",
       activity: "skiing",

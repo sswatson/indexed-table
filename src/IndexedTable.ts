@@ -7,7 +7,7 @@ type DataFrame<T extends TableRecord> = {
 /**
  * Represents a data table with indexable fields.
  *
- * `Microtable` is a data structure for representing a table of records,
+ * `IndexedTable` is a data structure for representing a table of records,
  * where each record is an object with named fields. The table supports
  * efficient querying on these records based on field values, and can create
  * indexes on specific fields to optimize these queries.
@@ -16,7 +16,7 @@ type DataFrame<T extends TableRecord> = {
  *
  * ```typescript
  * type Activity = {person: string, activity: string, rating: number};
- * const activities = Microtable.create<Activity>([
+ * const activities = IndexedTable.create<Activity>([
  *   {person: 'Alice',   activity: 'hiking',   rating: 5},
  *   {person: 'Alice',   activity: 'swimming', rating: 3},
  *   {person: 'Bob',     activity: 'hiking',   rating: 2},
@@ -30,13 +30,13 @@ type DataFrame<T extends TableRecord> = {
  * console.log(table.where({person: 'Alice', activity: 'hiking'}).records());
  * ```
  */
-export class Microtable<T extends TableRecord> {
+export class IndexedTable<T extends TableRecord> {
   private data: DataFrame<T>;
   private indexes: { [key: string]: Map<any, number[]> };
   private uniquenessIndexNames: string[] = [];
   private fields: (keyof T)[];
   public length: number;
-  
+
   constructor(data: DataFrame<T> | T[], fields: (keyof T)[] = []) {
     if (Array.isArray(data)) {
       const keys = fields.length
@@ -61,9 +61,9 @@ export class Microtable<T extends TableRecord> {
     this.indexes = {};
   }
   /**
-   * Creates a new Microtable instance.
+   * Creates a new IndexedTable instance.
    *
-   * The Microtable is a data structure that allows efficient querying on
+   * The IndexedTable is a data structure that allows efficient querying on
    * rows of data. Each row is an object with named fields, and queries are
    * expressed as objects with matching field names.
    *
@@ -74,12 +74,12 @@ export class Microtable<T extends TableRecord> {
    * @param {string[]} [fields] - The names of the fields in the data (optional).
    *
    * @example
-   * const alphabet = Microtable.create<{ index: number; letter: string }>({
+   * const alphabet = IndexedTable.create<{ index: number; letter: string }>({
    *    index: [1, 2, 3],
    *    letter: ['a', 'b', 'c'],
    * });
    *
-   * const alphabet = Microtable.create<{ index: number; letter: string }>([
+   * const alphabet = IndexedTable.create<{ index: number; letter: string }>([
    *   { index: 1, letter: 'a' },
    *   { index: 2, letter: 'b' },
    *   { index: 3, letter: 'c' },
@@ -89,7 +89,7 @@ export class Microtable<T extends TableRecord> {
     data: DataFrame<T> | T[],
     fields: (keyof T)[] = []
   ) {
-    return new Microtable<T>(data, fields);
+    return new IndexedTable<T>(data, fields);
   }
 
   /**
@@ -99,7 +99,7 @@ export class Microtable<T extends TableRecord> {
    *
    * @example
    * ```
-   * const alphabet = Microtable.create<{ index: number; letter: string }>({
+   * const alphabet = IndexedTable.create<{ index: number; letter: string }>({
    *   index: [1, 2, 3],
    *   letter: ['a', 'b', 'c'],
    * });
@@ -118,7 +118,7 @@ export class Microtable<T extends TableRecord> {
    * @returns {T} The record at the specified index.
    *
    * @example
-   * const alphabet = Microtable.create<{ index: number; letter: string }>({
+   * const alphabet = IndexedTable.create<{ index: number; letter: string }>({
    *   index: [1, 2, 3],
    *   letter: ['a', 'b', 'c'],
    * });
@@ -141,14 +141,14 @@ export class Microtable<T extends TableRecord> {
   }
 
   /**
-   * Returns a new Microtable instance containing the records matching the specified fields.
+   * Returns a new IndexedTable instance containing the records matching the specified fields.
    *
    * @param {Partial<T>} match - An object specifying the fields and values to match.
-   * @returns {Microtable<T>} A new Microtable instance containing the matching records.
+   * @returns {IndexedTable<T>} A new IndexedTable instance containing the matching records.
    *
    * @example
    * ```
-   * const activities = Microtable.create<Activity>([
+   * const activities = IndexedTable.create<Activity>([
    *   {person: 'Alice',   activity: 'hiking',   rating: 5},
    *   {person: 'Alice',   activity: 'swimming', rating: 3},
    *   {person: 'Bob',     activity: 'hiking',   rating: 2},
@@ -163,7 +163,7 @@ export class Microtable<T extends TableRecord> {
    * // Output: [{person: 'Bob', activity: 'hiking', rating: 2}]
    * ```
    */
-  where(match: Partial<T>): Microtable<T> {
+  where(match: Partial<T>): IndexedTable<T> {
     const matchFields = Object.keys(match);
     const key = this.fieldKey(matchFields);
 
@@ -172,7 +172,7 @@ export class Microtable<T extends TableRecord> {
       const records = (this.indexes[key].get(indexKey) || []).map((i) =>
         this.record(i)
       );
-      return Microtable.create<T>(records, this.fields);
+      return IndexedTable.create<T>(records, this.fields);
     } else {
       const matchFields = Object.keys(match);
       const key = this.fieldKey(matchFields);
@@ -204,13 +204,13 @@ export class Microtable<T extends TableRecord> {
 
   /**
    *
-   * Return a new Microtable instance containing the specified fields.
+   * Return a new IndexedTable instance containing the specified fields.
    *
    * @param {string[]} fields - The field names to select.
    *
    * @example
    * ```
-   * const alphabet = Microtable.create({ index: number; letter: string }>({
+   * const alphabet = IndexedTable.create({ index: number; letter: string }>({
    *   index: [1, 2, 3],
    *   letter: ['a', 'b', 'c'],
    *   scrabble_points: [1, 3, 3],
@@ -218,7 +218,7 @@ export class Microtable<T extends TableRecord> {
    *
    * console.log(alphabet.select(['index', 'letter']).records());
    */
-  select<K extends keyof T>(...fields: K[]): Microtable<Pick<T, K>> {
+  select<K extends keyof T>(...fields: K[]): IndexedTable<Pick<T, K>> {
     const records: Pick<T, K>[] = [];
     const rowLength = this.data[Object.keys(this.data)[0]].length;
     for (let i = 0; i < rowLength; i++) {
@@ -228,7 +228,7 @@ export class Microtable<T extends TableRecord> {
       });
       records.push(record as Pick<T, K>);
     }
-    return Microtable.create(records);
+    return IndexedTable.create(records);
   }
 
   /**
@@ -237,7 +237,7 @@ export class Microtable<T extends TableRecord> {
    *
    * @example
    * ```
-   * const alphabet = Microtable.create({ index: number; letter: string }>({
+   * const alphabet = IndexedTable.create({ index: number; letter: string }>({
    *   index: [1, 2, 3],
    *   letter: ['a', 'b', 'c'],
    * });
@@ -287,7 +287,7 @@ export class Microtable<T extends TableRecord> {
    * @throws {Error} If any of the specified fields do not exist in the table.
    * @throws {Error} If no index exists for the specified fields.
    * @example
-   * const alphabet = Microtable.create({ index: number; letter: string }>({
+   * const alphabet = IndexedTable.create({ index: number; letter: string }>({
    *  index: [1, 2, 3],
    *  letter: ['a', 'b', 'c'],
    * });
@@ -409,13 +409,13 @@ export class Microtable<T extends TableRecord> {
    * Returns a new table containing the specified rows.
    *
    * @param indices - The indices of the rows to include in the result table
-   * @returns - A new Microtable instance containing the specified rows
+   * @returns - A new IndexedTable instance containing the specified rows
    */
   private filterByRowIndex(indices: number[]) {
     const data: Partial<DataFrame<T>> = {};
     for (let field of this.fields) {
       data[field] = indices.map((i) => this.data[field][i]);
     }
-    return Microtable.create<T>(data as DataFrame<T>, this.fields);
+    return IndexedTable.create<T>(data as DataFrame<T>, this.fields);
   }
 }

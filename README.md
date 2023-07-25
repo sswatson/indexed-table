@@ -1,27 +1,27 @@
-# Microtable
+# indexed-table
 
-Microtable is a lightweight in-memory DataFrame for JavaScript. At less than 3 KB minified, it's between 100 and 1000 times smaller than more full-featured DataFrame libraries like [Arquero](https://uwdata.github.io/arquero/), [https://sql.js.org/](sql.js), or [Danfo](https://danfo.jsdata.org/).
+`indexed-table` is a lightweight in-memory DataFrame for JavaScript. At less than 3 KB minified, it's between 100 and 1000 times smaller than more full-featured DataFrame libraries like [Arquero](https://uwdata.github.io/arquero/), [https://sql.js.org/](sql.js), or [Danfo](https://danfo.jsdata.org/).
 
 ## Installation
 
-You can install Microtable via npm:
+You can install indexed-table via npm:
 
 ```bash
-npm install microtable
+npm install indexed-table
 ```
 
 ## Basic Usage
 
-First, import the `Microtable` class:
+First, import the `IndexedTable` class:
 
 ```javascript
-import { Microtable } from "microtable";
+import { IndexedTable } from "indexed-table";
 ```
 
-To create a new Microtable, use the `Microtable.create` method:
+To create a new IndexedTable, use the `IndexedTable.create` method:
 
 ```javascript
-const myTable = Microtable.create([
+const myTable = IndexedTable.create([
     { person: "Alice", activity: "hiking", rating: 5 },
     { person: "Alice", activity: "swimming", rating: 3 },
     { person: "Bob", activity: "hiking", rating: 2 },
@@ -34,7 +34,7 @@ const myTable = Microtable.create([
 
 ## Querying
 
-Microtable methods return new tables, allowing you to chain multiple operations together:
+IndexedTable methods return new tables, allowing you to chain multiple operations together:
 
 ```javascript
 const results = myTable
@@ -46,7 +46,7 @@ The `where` method filters `myTable` to only include rows where the person is Bo
 
 ## Indexing and Uniqueness
 
-Microtable supports the creation of indexes on any combination of fields to speed up querying:
+IndexedTable supports the creation of indexes on any combination of fields:
 
 ```javascript
 myTable.createIndex("activity", "rating");
@@ -60,7 +60,7 @@ You can also delete indexes:
 myTable.deleteIndex("activity", "rating");
 ```
 
-Microtable supports the imposition of uniqueness constraints on any combination of fields:
+IndexedTable supports the imposition of uniqueness constraints on any combination of fields:
 
 ```javascript
 myTable.uniquenessConstraint("person", "activity");
@@ -93,26 +93,26 @@ const rating = myTable
   .single();
 ```
 
-## When to Use Microtable
+## When to Use IndexedTable
 
-You can think of a `Microtable` like a souped-up Javascript `Map`. It:
+You can think of a `IndexedTable` like a souped-up Javascript `Map`. It:
 
 1. Supports arbirarily many columns instead of just two (keys and values).
 2. Supports constant-time lookup of any column value based on any combination of other columns.
 
-These capabilities are especially useful as an alternative to the pattern of storing the same data in multiple `Map` objects to support a variety of different lookup patterns that you need in your application. DataFrame libraries are seldom used for this purpose because they are large and their ergonomics are not well-suited to it. Microtable is small enough to be used in place of `Map` whenever it would be convenient.
+These capabilities are especially useful as an alternative to the pattern of storing the same data in multiple `Map` objects to support a variety of different lookup patterns that you need in your application. DataFrame libraries are seldom used for this purpose because they are large and their ergonomics are not well-suited to it. IndexedTable is small enough to be used in place of `Map` whenever it would be convenient.
 
-## When not to use Microtable
+## When not to use IndexedTable
 
-Microtable is not a replacement for a relational database. It does not provide features like transactions, joins, aggregations, sorting, and many other features that relational databases provide.
+IndexedTable is not a replacement for a relational database. It does not provide features like transactions, joins, aggregations, sorting, and many other features that relational databases provide.
 
-Likewise, Microtable is not a replacement for a full-featured DataFrame library. It achieves its small size by omitting many features that are important for data analysis but not necessary for use cases that are doable but cumbersome with a `Map`.
+Likewise, IndexedTable is not a replacement for a full-featured DataFrame library. It achieves its small size by omitting many features that are important for data analysis but not necessary for use cases that are doable but cumbersome with a `Map`.
 
 In summary, here are the options mentioned in this README in increasing order of size and complexity:
 
 1. `Map`, built-in - a two-column store that supports fast lookup of values based on keys.
-2. `Microtable`, 3 KB - a multi-column store that supports fast lookup of data based on any combination of columns.
-3. `DataFrame`, ~100 KB - a multi-column store that includes a wide variety of statistically useful features, typically including the ones provided by Microtable.
+2. `IndexedTable`, 3 KB - a multi-column store that supports fast lookup of data based on any combination of columns.
+3. `DataFrame`, ~100 KB - a multi-column store that includes a wide variety of statistically useful features, typically including the ones provided by IndexedTable.
 4. In-memory relational database, ~1000 KB - a multi-table store with most or all of the features of a `DataFrame` library and many additional features.
 5. Persistent relational database, N/A - a multi-table store with all of the features of an in-memory relational database plus the ability to store data durably in a centralized way.
 
