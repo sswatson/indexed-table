@@ -36,8 +36,7 @@ export class Microtable<T extends TableRecord> {
   private uniquenessIndexNames: string[] = [];
   private fields: (keyof T)[];
   public length: number;
-  static blank = Symbol("blank");
-
+  
   constructor(data: DataFrame<T> | T[], fields: (keyof T)[] = []) {
     if (Array.isArray(data)) {
       const keys = fields.length

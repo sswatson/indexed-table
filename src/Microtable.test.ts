@@ -1,7 +1,5 @@
 import { Microtable } from "./Microtable";
 
-const { blank } = Microtable;
-
 type Activity = { person: string; activity: string; rating: number };
 
 function randomName() {
